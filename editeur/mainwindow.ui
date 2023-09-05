@@ -16,6 +16,20 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
+     <widget class="QLabel" name="lineLabel">
+      <property name="text">
+       <string>Ligne :</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="columnLabel">
+      <property name="text">
+       <string>Colonne :</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QPlainTextEdit" name="textEdit">
       <property name="enabled">
        <bool>true</bool>
@@ -41,7 +55,6 @@
     <addaction name="separator"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSave_As"/>
     <addaction name="actionPrint"/>
     <addaction name="actionQuit"/>
    </widget>

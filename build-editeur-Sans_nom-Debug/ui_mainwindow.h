@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -41,6 +42,8 @@ public:
     QAction *actionQuick_Help;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout_4;
+    QLabel *lineLabel;
+    QLabel *columnLabel;
     QPlainTextEdit *textEdit;
     QMenuBar *menubar;
     QMenu *menuFile;
@@ -85,6 +88,16 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout_4 = new QVBoxLayout(centralwidget);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        lineLabel = new QLabel(centralwidget);
+        lineLabel->setObjectName(QString::fromUtf8("lineLabel"));
+
+        verticalLayout_4->addWidget(lineLabel);
+
+        columnLabel = new QLabel(centralwidget);
+        columnLabel->setObjectName(QString::fromUtf8("columnLabel"));
+
+        verticalLayout_4->addWidget(columnLabel);
+
         textEdit = new QPlainTextEdit(centralwidget);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
         textEdit->setEnabled(true);
@@ -113,7 +126,6 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionOpen);
         menuFile->addAction(actionSave);
-        menuFile->addAction(actionSave_As);
         menuFile->addAction(actionPrint);
         menuFile->addAction(actionQuit);
         menuEdit->addAction(actionCut);
@@ -164,6 +176,8 @@ public:
         actionGo_to_line->setText(QCoreApplication::translate("MainWindow", "Go to line", nullptr));
         actionProject_info->setText(QCoreApplication::translate("MainWindow", "Project info", nullptr));
         actionQuick_Help->setText(QCoreApplication::translate("MainWindow", "Quick Help", nullptr));
+        lineLabel->setText(QCoreApplication::translate("MainWindow", "Ligne :", nullptr));
+        columnLabel->setText(QCoreApplication::translate("MainWindow", "Colonne :", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));

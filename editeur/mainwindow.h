@@ -17,6 +17,18 @@ public:
     void fileLoad(const QString &fileName);
 
 private slots: void fileOpen();
+private slots: void fileSave();
+private slots: void updateCursorPosition();
+private slots: void showSearchDialog();
+private slots: void highlightText(const QString &searchText);
+
+
+
+
+private :
+    int currentLine = 1;
+    int currentColumn = 1;
+
 
 private:
     Ui::MainWindow *ui;
