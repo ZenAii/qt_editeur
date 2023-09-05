@@ -21,6 +21,8 @@ private slots: void fileSave();
 private slots: void updateCursorPosition();
 private slots: void showSearchDialog();
 private slots: void highlightText(const QString &searchText);
+private slots: void addNewTab();
+
 
 
 
@@ -29,8 +31,10 @@ private :
     int currentLine = 1;
     int currentColumn = 1;
 
+    QWidget *cloneTabContent();
 
 private:
     Ui::MainWindow *ui;
 };
+
 #endif // MAINWINDOW_H

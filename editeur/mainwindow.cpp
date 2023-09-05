@@ -10,6 +10,8 @@
 
 
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -19,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::fileSave);
     connect(ui->textEdit, &QPlainTextEdit::cursorPositionChanged, this, &MainWindow::updateCursorPosition);
     connect(ui->actionFind, &QAction::triggered, this, &MainWindow::showSearchDialog);
-
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(addNewTab()));
 
 
 
@@ -128,6 +130,7 @@ void MainWindow::highlightText(const QString &searchText)
     QTextCharFormat format;
     format.setBackground(Qt::yellow); // Couleur de surlignage
 
+    QTextCursor highlightCursor(document);
     QTextCursor clearCursor(document); // Ajout d'un nouveau curseur pour effacer la surbrillance précédente
 
     // Effacez la surbrillance précédente
@@ -135,16 +138,28 @@ void MainWindow::highlightText(const QString &searchText)
     clearCursor.setCharFormat(QTextCharFormat());
     ui->textEdit->setTextCursor(clearCursor);
 
-    // Recherche et surbrillance de toutes les occurrences du texte partiel
-    QTextCursor highlightCursor(document);
     while (!highlightCursor.isNull() && !highlightCursor.atEnd()) {
         highlightCursor = document->find(searchText, highlightCursor, QTextDocument::FindWholeWords);
 
         if (!highlightCursor.isNull()) {
             highlightCursor.mergeCharFormat(format);
+            cursor.setPosition(highlightCursor.position() + searchText.length());
+            ui->textEdit->setTextCursor(cursor);
         }
     }
 }
+
+void MainWindow::addNewTab()
+{
+    QTextEdit *newTextEdit = new QTextEdit();
+    int newTabIndex = ui->tabWidget->addTab(newTextEdit, "Nouvel onglet");
+
+    ui->tabWidget->setCurrentIndex(newTabIndex);
+}
+
+
+
+
 
 
 

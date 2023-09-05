@@ -12,12 +12,15 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -41,7 +44,12 @@ public:
     QAction *actionProject_info;
     QAction *actionQuick_Help;
     QWidget *centralwidget;
-    QVBoxLayout *verticalLayout_4;
+    QVBoxLayout *verticalLayout_2;
+    QPushButton *pushButton;
+    QTabWidget *tabWidget;
+    QWidget *tab;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout;
     QLabel *lineLabel;
     QLabel *columnLabel;
     QPlainTextEdit *textEdit;
@@ -86,23 +94,43 @@ public:
         actionQuick_Help->setObjectName(QString::fromUtf8("actionQuick_Help"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        verticalLayout_4 = new QVBoxLayout(centralwidget);
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-        lineLabel = new QLabel(centralwidget);
+        verticalLayout_2 = new QVBoxLayout(centralwidget);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        pushButton = new QPushButton(centralwidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        verticalLayout_2->addWidget(pushButton);
+
+        tabWidget = new QTabWidget(centralwidget);
+        tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
+        tab = new QWidget();
+        tab->setObjectName(QString::fromUtf8("tab"));
+        verticalLayout = new QVBoxLayout(tab);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+
+        verticalLayout->addLayout(horizontalLayout);
+
+        lineLabel = new QLabel(tab);
         lineLabel->setObjectName(QString::fromUtf8("lineLabel"));
 
-        verticalLayout_4->addWidget(lineLabel);
+        verticalLayout->addWidget(lineLabel);
 
-        columnLabel = new QLabel(centralwidget);
+        columnLabel = new QLabel(tab);
         columnLabel->setObjectName(QString::fromUtf8("columnLabel"));
 
-        verticalLayout_4->addWidget(columnLabel);
+        verticalLayout->addWidget(columnLabel);
 
-        textEdit = new QPlainTextEdit(centralwidget);
+        textEdit = new QPlainTextEdit(tab);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
         textEdit->setEnabled(true);
 
-        verticalLayout_4->addWidget(textEdit);
+        verticalLayout->addWidget(textEdit);
+
+        tabWidget->addTab(tab, QString());
+
+        verticalLayout_2->addWidget(tabWidget);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -141,6 +169,9 @@ public:
 
         retranslateUi(MainWindow);
 
+        tabWidget->setCurrentIndex(0);
+
+
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
@@ -173,11 +204,16 @@ public:
         actionPaste->setText(QCoreApplication::translate("MainWindow", "Paste", nullptr));
         actionUndo->setText(QCoreApplication::translate("MainWindow", "Undo", nullptr));
         actionFind->setText(QCoreApplication::translate("MainWindow", "Find", nullptr));
+#if QT_CONFIG(shortcut)
+        actionFind->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+F", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionGo_to_line->setText(QCoreApplication::translate("MainWindow", "Go to line", nullptr));
         actionProject_info->setText(QCoreApplication::translate("MainWindow", "Project info", nullptr));
         actionQuick_Help->setText(QCoreApplication::translate("MainWindow", "Quick Help", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
         lineLabel->setText(QCoreApplication::translate("MainWindow", "Ligne :", nullptr));
         columnLabel->setText(QCoreApplication::translate("MainWindow", "Colonne :", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "Tab 1", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
         menuEdit->setTitle(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
