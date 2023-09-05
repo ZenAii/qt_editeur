@@ -14,6 +14,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void fileLoad(const QString &fileName);
+
+private slots: void fileOpen();
 
 private:
     Ui::MainWindow *ui;
