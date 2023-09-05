@@ -23,18 +23,16 @@ private slots: void showSearchDialog();
 private slots: void highlightText(const QString &searchText);
 private slots: void addNewTab();
 
-
-
-
-
-private :
+private:
     int currentLine = 1;
-    int currentColumn = 1;
+    int currentColumn = 1; // Ajoutez ces membres
+    Ui::MainWindow *ui;
+
+
 
     QWidget *cloneTabContent();
 
-private:
-    Ui::MainWindow *ui;
+
 };
 
 #endif // MAINWINDOW_H

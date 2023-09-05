@@ -52,10 +52,14 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../editeur/main.cpp \
-		../editeur/mainwindow.cpp moc_mainwindow.cpp
-OBJECTS       = main.o \
+SOURCES       = ../editeur/customtabwidget.cpp \
+		../editeur/main.cpp \
+		../editeur/mainwindow.cpp moc_customtabwidget.cpp \
+		moc_mainwindow.cpp
+OBJECTS       = customtabwidget.o \
+		main.o \
 		mainwindow.o \
+		moc_customtabwidget.o \
 		moc_mainwindow.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -135,7 +139,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../editeur/editeur.pro ../editeur/mainwindow.h ../editeur/main.cpp \
+		../editeur/editeur.pro ../editeur/customtabwidget.h \
+		../editeur/mainwindow.h ../editeur/customtabwidget.cpp \
+		../editeur/main.cpp \
 		../editeur/mainwindow.cpp
 QMAKE_TARGET  = editeur
 DESTDIR       = 
@@ -322,8 +328,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../editeur/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../editeur/main.cpp ../editeur/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../editeur/customtabwidget.h ../editeur/mainwindow.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../editeur/customtabwidget.cpp ../editeur/main.cpp ../editeur/mainwindow.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../editeur/mainwindow.ui $(DISTDIR)/
 
 
@@ -356,9 +362,14 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	x86_64-linux-gnu-g++ -pipe -g -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_customtabwidget.cpp moc_mainwindow.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_customtabwidget.cpp moc_mainwindow.cpp
+moc_customtabwidget.cpp: ../editeur/customtabwidget.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/roulois/Bureau/qt_editeur/build-editeur-Sans_nom-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/roulois/Bureau/qt_editeur/editeur -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../editeur/customtabwidget.h -o moc_customtabwidget.cpp
+
 moc_mainwindow.cpp: ../editeur/mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -385,12 +396,19 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
+customtabwidget.o: ../editeur/customtabwidget.cpp ../editeur/customtabwidget.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o customtabwidget.o ../editeur/customtabwidget.cpp
+
 main.o: ../editeur/main.cpp ../editeur/mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../editeur/main.cpp
 
 mainwindow.o: ../editeur/mainwindow.cpp ../editeur/mainwindow.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		../editeur/customtabwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../editeur/mainwindow.cpp
+
+moc_customtabwidget.o: moc_customtabwidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_customtabwidget.o moc_customtabwidget.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

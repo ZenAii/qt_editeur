@@ -6,6 +6,7 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QInputDialog>
+#include "customtabwidget.h"
 
 
 
@@ -103,6 +104,8 @@ void MainWindow::updateCursorPosition()
 }
 
 
+
+
 void MainWindow::showSearchDialog()
 {
     bool ok;
@@ -149,13 +152,38 @@ void MainWindow::highlightText(const QString &searchText)
     }
 }
 
+
+
+// Fonction pour cloner le modèle de contenu initial (contenu du premier onglet)
+QWidget *MainWindow::cloneTabContent()
+{
+    // Clonez le contenu du premier onglet (widgets, disposition, etc.)
+    QWidget *newTabContent = new QWidget();
+
+    // Copiez les éléments du modèle de contenu initial ici.
+    // Par exemple, copiez des lignes, des colonnes, des zones de texte, etc.
+
+    return newTabContent;
+}
+
 void MainWindow::addNewTab()
 {
-    QTextEdit *newTextEdit = new QTextEdit();
-    int newTabIndex = ui->tabWidget->addTab(newTextEdit, "Nouvel onglet");
+    // Récupérez la position de curseur actuelle
+    QTextCursor cursor = ui->textEdit->textCursor();
+    int currentLine = cursor.blockNumber() + 1;
+    int currentColumn = cursor.columnNumber() + 1;
 
+    // Créez un nouvel onglet avec le widget personnalisé
+    CustomTabWidget *newTabWidget = new CustomTabWidget(this, currentLine, currentColumn);
+
+    // Ajoutez le nouvel onglet au QTabWidget
+    int newTabIndex = ui->tabWidget->addTab(newTabWidget, "Nouvel onglet");
+
+    // Assurez-vous que le nouvel onglet est activé
     ui->tabWidget->setCurrentIndex(newTabIndex);
 }
+
+
 
 
 
