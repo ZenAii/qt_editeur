@@ -26,6 +26,11 @@ private slots: void addNewTab();
 private slots: void closeLastTab();
 private slots: void createNewEditor();
 private slots: void closeEvent(QCloseEvent *event);
+private slots: void copyText();
+private slots: void cutText();
+private slots: void pasteText();
+private slots: void undoText();
+
 
 
 private:

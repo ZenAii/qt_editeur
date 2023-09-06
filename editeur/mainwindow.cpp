@@ -27,6 +27,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(addNewTab()));
     connect(ui->closeButton, &QPushButton::clicked, this, &MainWindow::closeLastTab);
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createNewEditor);
+    connect(ui->actionCopy, &QAction::triggered, ui->textEdit, &QPlainTextEdit::copy);
+    connect(ui->actionCut, &QAction::triggered, ui->textEdit, &QPlainTextEdit::cut);
+    connect(ui->actionPaste, &QAction::triggered, ui->textEdit, &QPlainTextEdit::paste);
+    connect(ui->actionUndo, &QAction::triggered, ui->textEdit, &QPlainTextEdit::undo);
+
+
 
 
 
@@ -273,6 +279,26 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     event->accept(); // Acceptez la fermeture de l'application
+}
+
+void MainWindow::copyText()
+{
+    ui->textEdit->copy();
+}
+
+void MainWindow::cutText()
+{
+    ui->textEdit->cut();
+}
+
+void MainWindow::pasteText()
+{
+    ui->textEdit->paste();
+}
+
+void MainWindow::undoText()
+{
+    ui->textEdit->undo();
 }
 
 
