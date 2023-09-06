@@ -7,7 +7,7 @@
 #include <QTextBlock>
 #include <QInputDialog>
 #include "customtabwidget.h"
-
+#include "closabletabcontent.h"
 
 
 
@@ -23,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->textEdit, &QPlainTextEdit::cursorPositionChanged, this, &MainWindow::updateCursorPosition);
     connect(ui->actionFind, &QAction::triggered, this, &MainWindow::showSearchDialog);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(addNewTab()));
+    connect(ui->closeButton, &QPushButton::clicked, this, &MainWindow::closeLastTab);
+    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::createNewEditor);
+
 
 
 
@@ -178,6 +181,28 @@ void MainWindow::addNewTab()
 
     // Ajoutez le nouvel onglet au QTabWidget
     int newTabIndex = ui->tabWidget->addTab(newTabWidget, "Nouvel onglet");
+
+    // Assurez-vous que le nouvel onglet est activé
+    ui->tabWidget->setCurrentIndex(newTabIndex);
+}
+
+void MainWindow::closeLastTab()
+{
+    int tabCount = ui->tabWidget->count();
+    if (tabCount > 0) {
+        int lastIndex = tabCount - 1;
+        ui->tabWidget->removeTab(lastIndex);
+    }
+}
+
+
+void MainWindow::createNewEditor()
+{
+    // Créez un nouvel onglet avec le widget personnalisé
+    CustomTabWidget *newTabWidget = new CustomTabWidget(this);
+
+    // Ajoutez le nouvel onglet au QTabWidget
+    int newTabIndex = ui->tabWidget->addTab(newTabWidget, "Nouvel éditeur");
 
     // Assurez-vous que le nouvel onglet est activé
     ui->tabWidget->setCurrentIndex(newTabIndex);

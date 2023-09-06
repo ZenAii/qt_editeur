@@ -22,6 +22,8 @@ private slots: void updateCursorPosition();
 private slots: void showSearchDialog();
 private slots: void highlightText(const QString &searchText);
 private slots: void addNewTab();
+private slots: void closeLastTab();
+private slots: void createNewEditor();
 
 private:
     int currentLine = 1;
