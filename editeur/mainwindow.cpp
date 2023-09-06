@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 
+
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +57,9 @@ void MainWindow::fileLoad(const QString &filename)
     QString text = in.readAll();
     ui->textEdit->setPlainText(text);
     statusBar()->showMessage(tr("File loaded"), 1000);
+    fileModified = false;
+    isFileModified = false;
+    this->setWindowModified(false);
 }
 
 void MainWindow::fileSave()
@@ -69,6 +73,9 @@ void MainWindow::fileSave()
             out << text;
             file.close();
             statusBar()->showMessage(tr("File saved"), 1000);
+            fileModified = false;
+            isFileModified = false;
+            this->setWindowModified(false);
         } else {
             QMessageBox::warning(this, tr("Warning"),
                                  tr("Cannot save file %1;\n%2").arg(QDir::toNativeSeparators(fileName), file.errorString()));
@@ -104,6 +111,9 @@ void MainWindow::updateCursorPosition()
 
     ui->lineLabel->setText(lineLabel);
     ui->columnLabel->setText(columnLabel);
+    fileModified = true;
+    isFileModified = true;
+    this->setWindowModified(true);
 }
 
 
@@ -184,6 +194,8 @@ void MainWindow::addNewTab()
 
     // Assurez-vous que le nouvel onglet est activé
     ui->tabWidget->setCurrentIndex(newTabIndex);
+
+
 }
 
 void MainWindow::closeLastTab()
@@ -208,7 +220,24 @@ void MainWindow::createNewEditor()
     ui->tabWidget->setCurrentIndex(newTabIndex);
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    if (fileModified) {
+        QMessageBox::StandardButton result;
+        result = QMessageBox::warning(this, tr("Application"),
+                                      tr("Le document à été modifié.\nVoulez-vous Enregistrer les modifications ?"),
+                                      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
+        if (result == QMessageBox::Save) {
+            fileSave();
+        } else if (result == QMessageBox::Cancel) {
+            event->ignore(); // Ignorez la fermeture de l'application
+            return;
+        }
+    }
+
+    event->accept(); // Acceptez la fermeture de l'application
+}
 
 
 

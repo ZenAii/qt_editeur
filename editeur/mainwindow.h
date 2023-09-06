@@ -24,15 +24,23 @@ private slots: void highlightText(const QString &searchText);
 private slots: void addNewTab();
 private slots: void closeLastTab();
 private slots: void createNewEditor();
+private slots: void closeEvent(QCloseEvent *event);
+
 
 private:
     int currentLine = 1;
     int currentColumn = 1; // Ajoutez ces membres
     Ui::MainWindow *ui;
 
+    bool fileModified = false;
+    bool isFileModified = false;
+
+
+
 
 
     QWidget *cloneTabContent();
+
 
 
 };
