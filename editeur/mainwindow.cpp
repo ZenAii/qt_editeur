@@ -13,6 +13,8 @@
 
 
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -40,16 +42,16 @@ MainWindow::~MainWindow()
 void MainWindow::fileOpen()
 {
     QString fileName = QFileDialog::getOpenFileName(this);
-    if(!fileName.isEmpty())
-        fileLoad(fileName);
+    if (!fileName.isEmpty())
+        fileLoad(fileName); // Appelez la fonction fileLoad avec le nom de fichier sélectionné
 }
 
-void MainWindow::fileLoad(const QString &filename)
+void MainWindow::fileLoad(const QString &fileName)
 {
-    QFile file(filename);
+    QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Warning"),
-                             tr("Cannot open file %1;\n2.").arg(QDir::toNativeSeparators(filename), file.errorString()));
+                             tr("Cannot open file %1;\n%2").arg(QDir::toNativeSeparators(fileName), file.errorString()));
         return;
     }
 
@@ -58,9 +60,23 @@ void MainWindow::fileLoad(const QString &filename)
     ui->textEdit->setPlainText(text);
     statusBar()->showMessage(tr("File loaded"), 1000);
     fileModified = false;
+
+    // Créez un nouvel onglet avec le widget personnalisé et le nom de fichier
+    CustomTabWidget *newTabWidget = new CustomTabWidget(this, text, fileName);
+
+    // Ajoutez le nouvel onglet au QTabWidget
+    int newTabIndex = ui->tabWidget->addTab(newTabWidget, fileName);
+
+    // Stockez le nom du fichier associé à cet onglet
+    tabFileNames[newTabIndex] = fileName;
+
+    // Assurez-vous que le nouvel onglet est activé
+    ui->tabWidget->setCurrentIndex(newTabIndex);
+
     isFileModified = false;
     this->setWindowModified(false);
 }
+
 
 void MainWindow::fileSave()
 {
@@ -76,12 +92,22 @@ void MainWindow::fileSave()
             fileModified = false;
             isFileModified = false;
             this->setWindowModified(false);
+
+            // Mettez à jour le nom de l'onglet en supprimant l'astérisque (*)
+            int currentIndex = ui->tabWidget->currentIndex();
+            if (currentIndex >= 0) {
+                QString tabText = ui->tabWidget->tabText(currentIndex);
+                if (tabText.endsWith(" *")) {
+                    ui->tabWidget->setTabText(currentIndex, tabText.left(tabText.length() - 2));
+                }
+            }
         } else {
             QMessageBox::warning(this, tr("Warning"),
                                  tr("Cannot save file %1;\n%2").arg(QDir::toNativeSeparators(fileName), file.errorString()));
         }
     }
 }
+
 
 void MainWindow::updateCursorPosition()
 {
@@ -113,11 +139,17 @@ void MainWindow::updateCursorPosition()
     ui->columnLabel->setText(columnLabel);
     fileModified = true;
     isFileModified = true;
-    this->setWindowModified(true);
+    this->setWindowModified(true); // Indiquez que la fenêtre est modifiée
+
+    // Mettez à jour le nom de l'onglet avec l'astérisque (*)
+    int currentIndex = ui->tabWidget->currentIndex();
+    if (currentIndex >= 0) {
+        QString tabText = ui->tabWidget->tabText(currentIndex);
+        if (!tabText.endsWith(" *")) {
+            ui->tabWidget->setTabText(currentIndex, tabText + " *");
+        }
+    }
 }
-
-
-
 
 void MainWindow::showSearchDialog()
 {
@@ -137,6 +169,7 @@ void MainWindow::showSearchDialog()
         highlightText(searchText);
     }
 }
+
 
 void MainWindow::highlightText(const QString &searchText)
 {
@@ -186,17 +219,20 @@ void MainWindow::addNewTab()
     int currentLine = cursor.blockNumber() + 1;
     int currentColumn = cursor.columnNumber() + 1;
 
-    // Créez un nouvel onglet avec le widget personnalisé
-    CustomTabWidget *newTabWidget = new CustomTabWidget(this, currentLine, currentColumn);
+    // Convertissez les entiers en chaînes de caractères
+    QString lineString = QString::number(currentLine);
+    QString columnString = QString::number(currentColumn);
+
+    // Créez un nouvel onglet avec le widget personnalisé en utilisant les chaînes de caractères
+    CustomTabWidget *newTabWidget = new CustomTabWidget(this, lineString, columnString);
 
     // Ajoutez le nouvel onglet au QTabWidget
     int newTabIndex = ui->tabWidget->addTab(newTabWidget, "Nouvel onglet");
 
     // Assurez-vous que le nouvel onglet est activé
     ui->tabWidget->setCurrentIndex(newTabIndex);
-
-
 }
+
 
 void MainWindow::closeLastTab()
 {

@@ -10,7 +10,7 @@ class CustomTabWidget : public QWidget
     Q_OBJECT
 
 public:
-    CustomTabWidget(QWidget *parent = nullptr, int initialLine = 1, int initialColumn = 1);
+    CustomTabWidget(QWidget *parent = nullptr, const QString& text = "", const QString& fileName = "");
 
 public slots:
     void updateCursorPosition(int line, int column);
@@ -22,7 +22,5 @@ private:
     int currentLine;
     int currentColumn;
 };
-
-
 
 #endif // CUSTOMTABWIDGET_H

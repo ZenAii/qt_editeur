@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMap>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,6 +41,8 @@ private:
 
 
     QWidget *cloneTabContent();
+    QMap<int, QString> tabFileNames;
+
 
 
 
