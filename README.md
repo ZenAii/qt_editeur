@@ -1,5 +1,5 @@
 # qt_editeur
-# README - CustomTabWidget
+# README 
 
 Ce programme est une application Qt en C++ qui démontre l'utilisation de plusieurs fonctionnalités pour la gestion de fichiers texte et d'onglets personnalisés. Il vous permet de créer, ouvrir, éditer et enregistrer des fichiers texte, tout en surveillant la position du curseur dans un éditeur de texte. De plus, il offre une fonctionnalité de recherche et de mise en évidence de texte dans le contenu du fichier.
 
