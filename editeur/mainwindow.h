@@ -33,6 +33,7 @@ private slots: void undoText();
 
 
 
+
 private:
     int currentLine = 1;
     int currentColumn = 1; // Ajoutez ces membres
@@ -40,6 +41,7 @@ private:
 
     bool fileModified = false;
     bool isFileModified = false;
+    QString currentFileName;
 
 
 

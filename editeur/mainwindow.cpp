@@ -50,6 +50,7 @@ void MainWindow::fileOpen()
     QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty())
         fileLoad(fileName); // Appelez la fonction fileLoad avec le nom de fichier sélectionné
+         currentFileName = fileName;
 }
 
 void MainWindow::fileLoad(const QString &fileName)
@@ -86,7 +87,16 @@ void MainWindow::fileLoad(const QString &fileName)
 
 void MainWindow::fileSave()
 {
-    QString fileName = QFileDialog::getSaveFileName(this);
+    QString fileName;
+
+    // Si currentFileName est vide, demandez à l'utilisateur de spécifier un nom de fichier
+    if (currentFileName.isEmpty()) {
+        fileName = QFileDialog::getSaveFileName(this);
+    } else {
+        // Utilisez currentFileName comme nom de fichier par défaut
+        fileName = currentFileName;
+    }
+
     if (!fileName.isEmpty()) {
         QFile file(fileName);
         if (file.open(QFile::WriteOnly | QFile::Text)) {
@@ -104,8 +114,14 @@ void MainWindow::fileSave()
             if (currentIndex >= 0) {
                 QString tabText = ui->tabWidget->tabText(currentIndex);
                 if (tabText.endsWith(" *")) {
-                    ui->tabWidget->setTabText(currentIndex, tabText.left(tabText.length() - 2));
+                    tabText = tabText.left(tabText.length() - 2);
                 }
+
+                // Mettez à jour le texte de l'onglet avec le nouveau nom de fichier
+                ui->tabWidget->setTabText(currentIndex, QFileInfo(fileName).fileName());
+
+                // Mettez à jour currentFileName avec le nom de fichier réellement utilisé
+                currentFileName = fileName;
             }
         } else {
             QMessageBox::warning(this, tr("Warning"),
@@ -113,6 +129,10 @@ void MainWindow::fileSave()
         }
     }
 }
+
+
+
+
 
 
 void MainWindow::updateCursorPosition()
